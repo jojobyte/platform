@@ -88,6 +88,39 @@ client.wallet.getAccount().then(async (account) => {
   }
 });
 ```
+### Connecting to a Devnet
+There are several ways to [Connect to a Devnet](https://dashplatform.readme.io/docs/tutorial-connecting-to-testnet#connect-to-a-devnet) while building & testing. If you've already setup a devnet with [dashmate](/packages/dashmate) you can connect to it as demonstrated below:
+```js
+const Dash = require('dash');
+
+// via Seed
+const client = new Dash.Client({
+  seeds: [{
+    // a url pointing to your server
+    host: 'seed-1.testnet.networks.dash.org',
+    httpPort: 3000,
+    grpcPort: 3010,
+  }],
+}); 
+
+// or via Address
+const client = new Dash.Client({
+  dapiAddresses: [
+    // IP or url(s) pointing to your server(s)
+    '127.0.0.1:3000:3010',
+    '127.0.0.2:3000:3010',
+  ],
+});
+
+async function connect() {
+  return await client.getDAPIClient().core.getBestBlockHash();
+}
+
+connect()
+  .then((d) => console.log('Connected. Best block hash:\n', d))
+  .catch((e) => console.error('Something went wrong:\n', e))
+  .finally(() => client.disconnect());
+```
 
 ### Primitives and essentials
 Dash SDK bundled into a standalone package, 
